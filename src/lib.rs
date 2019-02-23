@@ -120,9 +120,11 @@ mod prelude {
     pub struct PrintOnPanic<F: Fn() -> String>(pub F);
     impl<F: Fn() -> String> Drop for PrintOnPanic<F> {
         fn drop(&mut self) {
+            /*
             if ::std::thread::panicking() {
                 println!("{}", (self.0)());
             }
+            */
         }
     }
 
