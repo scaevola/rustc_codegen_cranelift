@@ -36,6 +36,8 @@ $RUSTC example/arbitrary_self_types_pointers_and_wrappers.rs --crate-name arbitr
 echo "[BUILD] sysroot"
 time ./build_sysroot/build_sysroot.sh
 
+exit 1
+
 echo "[AOT] alloc_example"
 $RUSTC example/alloc_example.rs --crate-type bin
 ./target/out/alloc_example
