@@ -257,7 +257,7 @@ impl<'a, 'tcx> FunctionDebugContext<'a, 'tcx> {
         source_info_set: &indexmap::IndexSet<SourceInfo>,
         local_map: FxHashMap<mir::Local, CPlace<'tcx>>,
     ) {
-        let end = self.create_debug_lines(context, isa, source_info_set);
+        /*let end = self.create_debug_lines(context, isa, source_info_set);
 
         self.debug_context
             .unit_range_list
@@ -268,10 +268,10 @@ impl<'a, 'tcx> FunctionDebugContext<'a, 'tcx> {
                     addend: 0,
                 },
                 length: end as u64,
-            });
+            });*/
 
         // FIXME make it more reliable and implement scopes before re-enabling this.
-        if false {
+        /*if false {
             let value_labels_ranges = context.build_value_labels_ranges(isa).unwrap();
 
             for (local, _local_decl) in self.mir.local_decls.iter_enumerated() {
@@ -292,12 +292,13 @@ impl<'a, 'tcx> FunctionDebugContext<'a, 'tcx> {
                 let var_entry = self.debug_context.dwarf.unit.get_mut(var_id);
                 var_entry.set(gimli::DW_AT_location, location);
             }
-        }
+        }*/
 
         // FIXME create locals for all entries in mir.var_debug_info
     }
 }
 
+/*
 fn place_location<'a, 'tcx>(
     func_debug_ctx: &mut FunctionDebugContext<'a, 'tcx>,
     isa: &dyn TargetIsa,
@@ -375,3 +376,4 @@ fn translate_loc(isa: &dyn TargetIsa, loc: ValueLoc, stack_slots: &StackSlots) -
         _ => None,
     }
 }
+*/
