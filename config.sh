@@ -10,9 +10,9 @@ else
    exit 1
 fi
 
-TARGET_TRIPLE=$(rustc -vV | grep host | cut -d: -f2 | tr -d " ")
+TARGET_TRIPLE="aarch64-unknown-linux-gnu"
 
-export RUSTFLAGS='--target aarch64-unknown-linux-gnu -Clinker=aarch64-linux-gnu-gcc -Cpanic=abort -Cdebuginfo=2 -Zpanic-abort-tests -Zcodegen-backend='$(pwd)'/target/'$CHANNEL'/librustc_codegen_cranelift.'$dylib_ext' --sysroot '$(pwd)'/build_sysroot/sysroot'
+export RUSTFLAGS='-Clinker=aarch64-linux-gnu-gcc -Cpanic=abort -Cdebuginfo=2 -Zpanic-abort-tests -Zcodegen-backend='$(pwd)'/target/'$CHANNEL'/librustc_codegen_cranelift.'$dylib_ext' --sysroot '$(pwd)'/build_sysroot/sysroot'
 
 # FIXME remove once the atomic shim is gone
 if [[ `uname` == 'Darwin' ]]; then
