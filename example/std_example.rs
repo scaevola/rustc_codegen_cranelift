@@ -1,7 +1,7 @@
 #![feature(core_intrinsics)]
 #![feature(is_sorted)]
 
-use std::arch::x86_64::*;
+//use std::arch::x86_64::*;
 use std::io::Write;
 
 fn main() {
@@ -86,11 +86,12 @@ fn main() {
 
     println!("{:?}", std::intrinsics::caller_location());
 
-    unsafe {
-        test_simd();
-    }
+    //unsafe {
+    //    test_simd();
+    //}
 }
 
+/*
 #[target_feature(enable = "sse2")]
 unsafe fn test_simd() {
     let x = _mm_setzero_si128();
@@ -245,6 +246,7 @@ unsafe fn test_mm_extract_epi8() {
     assert_eq!(r1, 0xFF);
     assert_eq!(r2, 3);
 }
+*/
 
 #[derive(PartialEq)]
 enum LoopState {

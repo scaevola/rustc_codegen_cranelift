@@ -16,48 +16,48 @@ rm -r target/out || true
 mkdir -p target/out/clif
 
 echo "[BUILD] mini_core"
-$RUSTC example/mini_core.rs --crate-name mini_core --crate-type lib,dylib --target aarch64-unknown-linux-gnu
+$RUSTC example/mini_core.rs --crate-name mini_core --crate-type lib,dylib --target $TARGET_TRIPLE
 
 echo "[BUILD] example"
-$RUSTC example/example.rs --crate-type lib --target aarch64-unknown-linux-gnu
+$RUSTC example/example.rs --crate-type lib --target $TARGET_TRIPLE
 
 #echo "[JIT] mini_core_hello_world"
 #CG_CLIF_JIT=1 CG_CLIF_JIT_ARGS="abc bcd" $RUSTC --crate-type bin -Cprefer-dynamic example/mini_core_hello_world.rs --cfg jit
 
 echo "[AOT] mini_core_hello_world"
-$RUSTC example/mini_core_hello_world.rs --crate-name mini_core_hello_world --crate-type bin -g --target aarch64-unknown-linux-gnu
+$RUSTC example/mini_core_hello_world.rs --crate-name mini_core_hello_world --crate-type bin -g --target $TARGET_TRIPLE
 qemu-aarch64 -E LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib ./target/out/mini_core_hello_world abc bcd
 # (echo "break set -n main"; echo "run"; sleep 1; echo "si -c 10"; sleep 1; echo "frame variable") | lldb -- ./target/out/mini_core_hello_world abc bcd
 
 echo "[AOT] arbitrary_self_types_pointers_and_wrappers"
-$RUSTC example/arbitrary_self_types_pointers_and_wrappers.rs --crate-name arbitrary_self_types_pointers_and_wrappers --crate-type bin --target aarch64-unknown-linux-gnu
+$RUSTC example/arbitrary_self_types_pointers_and_wrappers.rs --crate-name arbitrary_self_types_pointers_and_wrappers --crate-type bin --target $TARGET_TRIPLE
 qemu-aarch64 -E LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib ./target/out/arbitrary_self_types_pointers_and_wrappers
 
 echo "[BUILD] sysroot"
 time ./build_sysroot/build_sysroot.sh
 
 echo "[AOT] alloc_example"
-$RUSTC example/alloc_example.rs --crate-type bin
-./target/out/alloc_example
+$RUSTC example/alloc_example.rs --crate-type bin --target $TARGET_TRIPLE
+qemu-aarch64 -E LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib ./target/out/alloc_example
 
-echo "[JIT] std_example"
-CG_CLIF_JIT=1 $RUSTC --crate-type bin -Cprefer-dynamic example/std_example.rs
+#echo "[JIT] std_example"
+#CG_CLIF_JIT=1 $RUSTC --crate-type bin -Cprefer-dynamic example/std_example.rs
 
 echo "[AOT] dst_field_align"
 # FIXME Re-add -Zmir-opt-level=2 once rust-lang/rust#67529 is fixed.
-$RUSTC example/dst-field-align.rs --crate-name dst_field_align --crate-type bin
-./target/out/dst_field_align
+$RUSTC example/dst-field-align.rs --crate-name dst_field_align --crate-type bin --target $TARGET_TRIPLE
+qemu-aarch64 -E LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib ./target/out/dst_field_align || (echo $?; false)
 
 echo "[AOT] std_example"
-$RUSTC example/std_example.rs --crate-type bin
-./target/out/std_example
+$RUSTC example/std_example.rs --crate-type bin --target $TARGET_TRIPLE
+qemu-aarch64 -E LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib ./target/out/std_example --target $TARGET_TRIPLE
 
 echo "[AOT] subslice-patterns-const-eval"
-$RUSTC example/subslice-patterns-const-eval.rs --crate-type bin -Cpanic=abort
+$RUSTC example/subslice-patterns-const-eval.rs --crate-type bin -Cpanic=abort --target $TARGET_TRIPLE
 ./target/out/subslice-patterns-const-eval
 
 echo "[AOT] track-caller-attribute"
-$RUSTC example/track-caller-attribute.rs --crate-type bin -Cpanic=abort
+$RUSTC example/track-caller-attribute.rs --crate-type bin -Cpanic=abort --target $TARGET_TRIPLE
 ./target/out/track-caller-attribute
 
 echo "[BUILD] mod_bench"

@@ -489,7 +489,7 @@ pub mod libc {
     #[link(name = "c")]
     extern "C" {
         pub fn putchar(c: u8);
-        pub fn puts(s: *const u8);
+        pub fn puts(s: *const u8) -> i32;
         pub fn printf(format: *const i8, ...) -> i32;
         pub fn malloc(size: usize) -> *mut u8;
         pub fn free(ptr: *mut u8);
