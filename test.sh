@@ -65,7 +65,7 @@ $RUSTC example/track-caller-attribute.rs --crate-type bin -Cpanic=abort --target
 run_qemu ./target/out/track-caller-attribute
 
 echo "[BUILD] mod_bench"
-$RUSTC example/mod_bench.rs --crate-type bin
+$RUSTC example/mod_bench.rs --crate-type bin --target $TARGET_TRIPLE
 
 # FIXME linker gives multiple definitions error on Linux
 #echo "[BUILD] sysroot in release mode"
@@ -73,13 +73,12 @@ $RUSTC example/mod_bench.rs --crate-type bin
 
 pushd simple-raytracer
 echo "[BENCH COMPILE] ebobby/simple-raytracer"
-hyperfine --runs ${RUN_RUNS:-10} --warmup 1 --prepare "rm -r target/*/debug || true" \
-    "RUSTFLAGS='' cargo build --target $TARGET_TRIPLE" \
-    "../cargo.sh build"
+#../cargo.sh clean
+../cargo.sh build
 
 echo "[BENCH RUN] ebobby/simple-raytracer"
 cp ./target/*/debug/main ./raytracer_cg_clif
-hyperfine --runs ${RUN_RUNS:-10} ./raytracer_cg_llvm ./raytracer_cg_clif
+run_qemu ./raytracer_cg_clif
 popd
 
 pushd build_sysroot/sysroot_src/src/libcore/tests
