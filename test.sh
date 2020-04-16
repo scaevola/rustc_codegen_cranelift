@@ -13,7 +13,11 @@ fi
 source config.sh
 
 function run_qemu() {
-    qemu-aarch64 -E LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib $@
+    if [[ "$TARGET_ARCH" -eq "aarch64-unknown-linux-gnu" ]]; then
+        qemu-aarch64 -E LD_LIBRARY_PATH=/usr/aarch64-linux-gnu/lib $@
+    else
+        $@
+    fi
 }
 
 rm -r target/out || true
@@ -77,7 +81,7 @@ echo "[BENCH COMPILE] ebobby/simple-raytracer"
 ../cargo.sh build
 
 echo "[BENCH RUN] ebobby/simple-raytracer"
-cp ./target/*/debug/main ./raytracer_cg_clif
+cp ./target/$TARGET_TRIPLE/debug/main ./raytracer_cg_clif
 run_qemu ./raytracer_cg_clif
 popd
 
