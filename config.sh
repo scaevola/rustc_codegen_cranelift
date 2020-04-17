@@ -12,7 +12,7 @@ fi
 
 TARGET_TRIPLE="aarch64-unknown-linux-gnu"
 
-export RUSTFLAGS='-Clinker=aarch64-linux-gnu-gcc -Cpanic=abort -Cdebuginfo=2 -Zpanic-abort-tests -Zcodegen-backend='$(pwd)'/target/'$CHANNEL'/librustc_codegen_cranelift.'$dylib_ext' --sysroot '$(pwd)'/build_sysroot/sysroot'
+export RUSTFLAGS='-Csave-temps -Clinker=aarch64-linux-gnu-gcc -Cpanic=abort -Cdebuginfo=2 -Zpanic-abort-tests -Zcodegen-backend='$(pwd)'/target/'$CHANNEL'/librustc_codegen_cranelift.'$dylib_ext' --sysroot '$(pwd)'/build_sysroot/sysroot'
 
 # FIXME remove once the atomic shim is gone
 if [[ `uname` == 'Darwin' ]]; then
